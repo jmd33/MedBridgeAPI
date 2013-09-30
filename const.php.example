@@ -1,0 +1,4 @@
+<?php
+define("API_KEY", "Your api key");
+define("CLINICIAN_EMAIL", 'The clinician email');
+

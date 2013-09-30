@@ -5,7 +5,7 @@
 * @copyright Copyright (c) 2013, MedBridge Education
 *
 * This class is used to interact with MedBridge Education's Patient Care Vendor
-* API.
+* API. You can manage patients HEP (Home Exericse Program) through this API.
 *
 * The Software is provided by MedBridge on an "AS IS" basis.  MedBridge
 * MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
