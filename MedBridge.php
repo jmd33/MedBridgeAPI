@@ -59,7 +59,7 @@ class MedBridge{
 	/**
 	* Retrieve the token of a patient
 	* @param PatientEmail The email of the patient
-	* @return The token of the patiet or FALSE if it doesn't exist
+	* @return The token of the patient or FALSE if it doesn't exist
 	*/
 	public function patient_token($patient_email)
 	{
