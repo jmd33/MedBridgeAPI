@@ -1,7 +1,8 @@
 <?php
 require 'MedBridge.php';
+require 'const.php';
 
-$API_KEY = '125F4A494BC88DDE39B2597E0914E050F655B876BF';
+$API_KEY = API_KEY;
 
 echo 'Creating an instance of MedBridge'.PHP_EOL;
 
@@ -9,7 +10,7 @@ $medbridge = new MedBridge($API_KEY);
 
 echo 'Grab a clinician token we are working with'.PHP_EOL;
 
-$clinician_email = 'clinicianOne@RTDemo.com';
+$clinician_email = CLINICIAN_EMAIL;
 
 $clinician_token = $medbridge->clinician_token($clinician_email);
 

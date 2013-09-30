@@ -1,4 +1,7 @@
 <?php
+/**
+* 
+*/
 class MedBridge{
 
 	const BASE_URL = 'https://sandbox.medbridgeeducation.com/api/v2/vendor/';
