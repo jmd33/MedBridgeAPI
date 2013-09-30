@@ -60,7 +60,7 @@ class MedBridge{
 			'first_name' => $first_name,
 			'last_name' => $last_name,
 			'email' => $email,
-			'student' => $clinician_token //change back to clinician
+			'clinician' => $clinician_token 
 			);
 		$url = self::BASE_URL . 'create_patient';
 		$res = $this->post($url, $info);
