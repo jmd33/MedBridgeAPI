@@ -1,6 +1,26 @@
 <?php
 /**
+* @author Phil Sheperd
+* @version 1.0.0
+* @copyright Copyright (c) 2013, MedBridge Education
+*
+* This class is used to interact with MedBridge Education's Patient Care Vendor
+* API.
+*
+* The Software is provided by MedBridge on an "AS IS" basis.  MedBridge
+* MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
+* THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
+* FOR A PARTICULAR PURPOSE, REGARDING THE MedBridge SOFTWARE OR ITS USE AND
+* OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
 * 
+* IN NO EVENT SHALL MedBridge BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
+* OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+* INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
+* MODIFICATION AND/OR DISTRIBUTION OF THE MedBridge SOFTWARE, HOWEVER CAUSED
+* AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
+* STRICT LIABILITY OR OTHERWISE, EVEN IF MedBridge HAS BEEN ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
 */
 class MedBridge{
 
@@ -24,7 +44,8 @@ class MedBridge{
 	}
 
 	/**
-	* @param ClinicianEmail The email of the Clinician you want to get a token for
+	* Retrieve the token of a clinician  
+	* @param ClinicianEmail The email of the Clinician 
 	* @return The token of the clinician or False if it cannot be found
 	*/
 	public function clinician_token($clinician_email)
@@ -36,7 +57,8 @@ class MedBridge{
 	}
 
 	/**
-	* @param PatientEmail The email of the patient you want a token for
+	* Retrieve the token of a patient
+	* @param PatientEmail The email of the patient
 	* @return The token of the patiet or FALSE if it doesn't exist
 	*/
 	public function patient_token($patient_email)
@@ -48,10 +70,11 @@ class MedBridge{
 	}
 
 	/**
+	* Create a new patient for a clinician
 	* @param FirstName The first name of the patient
 	* @param LastName The last name of the patient
 	* @param Email The email of the patient
-	* @param ClinicianToken The token of the clinician who is creating this patient
+	* @param ClinicianToken The token of the clinician 
 	* @return The token of the patient
 	*/
 	public function create_patient($first_name, $last_name, $email, $clinician_token)
@@ -68,6 +91,7 @@ class MedBridge{
 	}
 
 	/**
+	* Retrieve the URL of a PDF of the patients current HEP
 	* @param PatientToken The token of the patient you want the current program
 	* @return A URL to the PDF version of the patients current program
 	*/
@@ -82,7 +106,8 @@ class MedBridge{
 	}
 
 	/**
-	* @param PatientToken The token of the patient you want to send their current program to
+	* Send the current HEP program to the patient
+	* @param PatientToken The token of the patient
 	* @return A boolean on whether it was sent properly
 	*/
 	public function send_current_program($patient_token)
@@ -95,6 +120,10 @@ class MedBridge{
 		return $res->status;
 	}
 
+	/**
+	* @internal
+	* @access Private
+	*/
 	private function post($url, $data)
 	{
 		$ch = $this->generate_curl($url);
@@ -104,6 +133,10 @@ class MedBridge{
 		return $this->process($res);
 	}
 
+	/**
+	* @internal
+	* @access Private
+	*/
 	private function get($url, $data)
 	{
 		$url = $this->generate_URL($url, $data);
@@ -113,6 +146,10 @@ class MedBridge{
 		return $this->process($res);
 	}
 
+	/**
+	* @internal
+	* @access Private
+	*/
 	private function process($response)
 	{
 		if( isset($response->status) && !$response->status ){
@@ -123,6 +160,8 @@ class MedBridge{
 	}
 
 	/**
+	* @internal
+	* @access Private
 	* @param URL The url the data needs to be appended to
 	* @param Data An associative array of data you want on the URL
 	* @return The generated URL with the data appended to the end
@@ -138,6 +177,8 @@ class MedBridge{
 	}
 
 	/**
+	* @internal
+	* @access Private
 	* @param URL The url you want to curl
 	* @return A curl object with the header and url set properly for MedBridge
 	*/
