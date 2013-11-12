@@ -2,33 +2,34 @@
 require 'MedBridge.php';
 require 'const.php';
 
-$API_KEY = API_KEY;
+define('UNIQUE_IDENTIFIER_LENGTH', 12);
 
 echo 'Creating an instance of MedBridge'.PHP_EOL;
 
-$medbridge = new MedBridge($API_KEY);
+$medbridge = new MedBridge(API_KEY);
 
 echo 'Grab a clinician token we are working with'.PHP_EOL;
 
-$clinician_email = CLINICIAN_EMAIL;
-
-$clinician_token = $medbridge->clinician_token($clinician_email);
+$clinician_token = $medbridge->clinician_token(CLINICIAN_EMAIL);
 
 echo "\tThe Clinician token is: {$clinician_token}".PHP_EOL;
 
 echo 'Let\'s start by creating a new patient'.PHP_EOL;
 
 $patient_email = time().'@example.com';
+$unique_identifier = substr(uniqid(), -UNIQUE_IDENTIFIER_LENGTH);
 $first_name = 'Lil';
 $last_name  = 'Wayne';
+$date_of_birth = '1982-09-27';
 $name = $first_name . ' ' . $last_name;
-$patient_token = $medbridge->create_patient($first_name, $last_name, $patient_email, $clinician_token);
+
+$patient_token = $medbridge->create_patient($first_name, $last_name, $unique_identifier, $date_of_birth, $clinician_token, array('email' => $patient_email));
 
 echo "\tThe Patients token is: {$patient_token}".PHP_EOL;
 
-echo "Let's grab the Patient Token now from the email to confirm they are equal".PHP_EOL;
+echo "Let's grab the Patient Token now from the unique_identifier to confirm they are equal".PHP_EOL;
 
-$new_patient_token = $medbridge->patient_token($patient_email);
+$new_patient_token = $medbridge->patient_token($unique_identifier);
 echo "\tThe new Patients token is: {$new_patient_token}".PHP_EOL;
 echo "\tThe old one was: {$patient_token} which should equal: {$new_patient_token}".PHP_EOL;
 

@@ -22,9 +22,10 @@
 * STRICT LIABILITY OR OTHERWISE, EVEN IF MedBridge HAS BEEN ADVISED OF THE
 * POSSIBILITY OF SUCH DAMAGE.
 */
+
 class MedBridge{
 
-	const BASE_URL = 'https://sandbox.medbridgeeducation.com/api/v2/vendor/';
+	const BASE_URL = 'https://localhost/api/v2/vendor/';
 
 	const HEADER_VALUE = 'MedBridge-API-KEY';
 
@@ -53,17 +54,18 @@ class MedBridge{
 		$info = array('email' => $clinician_email);
 		$url = self::BASE_URL . 'clinician_token';
 		$res = $this->get($url, $info);
+
 		return isset($res->clinician_token) ? $res->clinician_token : FALSE ;
 	}
 
 	/**
 	* Retrieve the token of a patient
-	* @param PatientEmail The email of the patient
+	* @param UniqueIdentifier The unique_identifier of the patient
 	* @return The token of the patient or FALSE if it doesn't exist
 	*/
-	public function patient_token($patient_email)
+	public function patient_token($unique_identifier)
 	{
-		$info = array('email' => $patient_email);
+		$info = array('token' => $unique_identifier);
 		$url = self::BASE_URL . 'patient_token';
 		$res = $this->get($url, $info);
 		return $res->patient_token;
@@ -73,18 +75,22 @@ class MedBridge{
 	* Create a new patient for a clinician
 	* @param FirstName The first name of the patient
 	* @param LastName The last name of the patient
-	* @param Email The email of the patient
+	* @param UniqueIdentifier A unique identifier for the patient
+	* @param DateOfBirth Thbe date of birth of the patient
 	* @param ClinicianToken The token of the clinician 
+	* @param Options(Optional) Extra parameters you may know about that patient, like email
 	* @return The token of the patient
 	*/
-	public function create_patient($first_name, $last_name, $email, $clinician_token)
+	public function create_patient($first_name, $last_name, $unique_identifier, $date_of_birth, $clinician_token, $options)
 	{
 		$info = array(
 			'first_name' => $first_name,
 			'last_name' => $last_name,
-			'email' => $email,
+			'token' => $unique_identifier,
+			'date_of_birth' => $date_of_birth,
 			'clinician' => $clinician_token 
 			);
+		$info = array_merge($info, $options);
 		$url = self::BASE_URL . 'create_patient';
 		$res = $this->post($url, $info);
 		return $res->patient_token;
@@ -143,6 +149,7 @@ class MedBridge{
 		$ch = $this->generate_curl($url);
 		curl_setopt($ch, CURLOPT_HTTPGET, 1);
 		$res = json_decode(curl_exec($ch));
+		curl_close($ch);
 		return $this->process($res);
 	}
 
@@ -187,6 +194,8 @@ class MedBridge{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(self::HEADER_VALUE.':'.$this->_api_key));
 		return $ch;
 	}
